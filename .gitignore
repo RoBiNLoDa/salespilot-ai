@@ -1,0 +1,52 @@
+# =====================================
+# Angular / Node
+# =====================================
+
+frontend/node_modules/
+frontend/.angular/
+frontend/dist/
+frontend/coverage/
+frontend/tmp/
+frontend/out-tsc/
+
+npm-debug.log*
+yarn-error.log*
+
+# =====================================
+# Python / FastAPI
+# =====================================
+
+backend/.venv/
+backend/__pycache__/
+backend/.pytest_cache/
+backend/**/*.py[cod]
+
+# =====================================
+# Environment
+# =====================================
+
+.env
+.env.*
+
+# =====================================
+# IDE
+# =====================================
+
+.vscode/
+.idea/
+.project
+.classpath
+.settings/
+
+# =====================================
+# OS
+# =====================================
+
+.DS_Store
+Thumbs.db
+
+# =====================================
+# Logs
+# =====================================
+
+*.log
