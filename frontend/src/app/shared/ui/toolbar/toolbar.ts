@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from '@features/auth/services/auth.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -9,5 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './toolbar.scss',
 })
 export class Toolbar {
+  authService = inject(AuthService);
 
+  
+  
 }
