@@ -1,0 +1,38 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+
+  background: var(--mat-sys-surface);
+}
+
+.login-container {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+}
+
+mat-card {
+  padding: 40px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+button[type='submit'] {
+  height: 48px;
+  width: 100%;
+}
+
+h1,
+p {
+  text-align: center;
+}
+
+p {
+  margin-bottom: 24px;
+}
