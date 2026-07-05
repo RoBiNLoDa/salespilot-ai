@@ -1,0 +1,38 @@
+<section>
+
+    <h1>Dashboard</h1>
+
+    <p class="welcome">
+        Bienvenido, Robinson 👋
+    </p>
+
+    <h2>Resumen general</h2>
+
+    <div class="dashboard-grid">
+        @for (stat of stats; track stat.title) {
+        <mat-card>
+
+            <mat-card-header>
+
+                <mat-card-title>{{ stat.title }}</mat-card-title>
+
+            </mat-card-header>
+
+            <mat-card-content>
+
+                <div class="stat-icon">
+                    <mat-icon>{{ stat.icon }}</mat-icon>
+                </div>
+
+                <h1 class="stat-value">
+                    {{ stat.value }}
+                </h1>
+
+            </mat-card-content>
+
+        </mat-card>
+        }
+    </div>
+
+
+</section>
