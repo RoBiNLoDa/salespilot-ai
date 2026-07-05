@@ -10,8 +10,18 @@ mat-nav-list {
 a[mat-list-item] {
   border-radius: 8px;
   margin: 4px 8px;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 a[mat-list-item]:hover {
   background: rgba(0, 0, 0, 0.05);
+}
+
+.active-link {
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--mat-sys-primary);
+
+  mat-icon {
+    color: var(--mat-sys-primary);
+  }
 }
