@@ -1,20 +1,20 @@
 import { Component } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 import { RouterOutlet } from '@angular/router';
+import { Logo } from "@shared/ui/logo/logo";
+import { Toolbar } from "@shared/ui/toolbar/toolbar";
+import { Sidebar } from "@shared/ui/sidebar/sidebar";
 
 @Component({
   selector: 'app-shell',
   imports: [
     MatToolbarModule,
     MatSidenavModule,
-    MatListModule,
-    MatIconModule,
-    MatButtonModule,
-    RouterOutlet
+    RouterOutlet,
+    Logo,
+    Toolbar,
+    Sidebar
 ],
   templateUrl: './shell.html',
   styleUrl: './shell.scss',

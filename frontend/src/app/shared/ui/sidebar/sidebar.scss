@@ -1,0 +1,17 @@
+:host {
+  display: block;
+  padding-top: 12px;
+}
+
+mat-nav-list {
+  padding: 0;
+}
+
+a[mat-list-item] {
+  border-radius: 8px;
+  margin: 4px 8px;
+}
+
+a[mat-list-item]:hover {
+  background: rgba(0, 0, 0, 0.05);
+}

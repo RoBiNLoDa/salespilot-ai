@@ -1,11 +1,15 @@
-.shell-container{
-    height:calc(100vh - 64px);
+.shell-container {
+  height: calc(100vh - 64px);
 }
 
-mat-sidenav{
-    width:260px;
+mat-sidenav {
+  width: 260px;
 }
 
-mat-sidenav-content{
-    padding:24px;
+mat-sidenav-content {
+  padding: 24px;
+}
+
+.spacer {
+  flex: 1;
 }
