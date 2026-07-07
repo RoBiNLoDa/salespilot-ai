@@ -11,9 +11,9 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: Login
-      }
-    ]
+        component: Login,
+      },
+    ],
   },
   {
     path: '',
@@ -21,12 +21,19 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        component: Dashboard
-      }
-    ]
+        component: Dashboard,
+      },
+      {
+        path: 'customers',
+        loadComponent: () =>
+          import('./features/customers/pages/customer-list/customer-list').then(
+            (m) => m.CustomerList,
+          ),
+      },
+    ],
   },
   {
     path: '**',
-    redirectTo: 'login'
-  }
+    redirectTo: 'login',
+  },
 ];
