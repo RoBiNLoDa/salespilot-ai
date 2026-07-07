@@ -1,6 +1,16 @@
-from fastapi import FastAPI
-from backend.app.api.customers import router as customer_router
+from fastapi import APIRouter, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.api.router import api_router
+from app.core.config import settings
 
-app = FastAPI(title="SalesPilot AI API")
+app = FastAPI(title=settings.app_name)
 
-app.include_router(customer_router, prefix="/api/v1")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[settings.frontend_origin],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(api_router, prefix=settings.api_v1_prefix)
