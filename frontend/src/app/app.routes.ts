@@ -6,6 +6,12 @@ import { Shell } from '@layout/shell/shell/shell';
 
 export const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'login',
+  },
+
+  {
     path: 'login',
     component: AuthLayout,
     children: [
@@ -15,23 +21,28 @@ export const routes: Routes = [
       },
     ],
   },
+
   {
     path: '',
     component: Shell,
     children: [
       {
         path: 'dashboard',
-        component: Dashboard,
+        loadComponent: () =>
+          import('./features/dashboard/pages/dashboard/dashboard').then(
+            (m) => m.Dashboard
+          ),
       },
       {
         path: 'customers',
         loadComponent: () =>
           import('./features/customers/pages/customer-list/customer-list').then(
-            (m) => m.CustomerList,
+            (m) => m.CustomerList
           ),
       },
     ],
   },
+
   {
     path: '**',
     redirectTo: 'login',

@@ -1,12 +1,16 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 import { Customer } from '../models/customer';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
+
+  private readonly http = inject(HttpClient);
 
   private readonly customers: Customer[] = [
     {
@@ -42,7 +46,10 @@ export class CustomerService {
   ];
 
   getAll(): Observable<Customer[]> {
-    return of(this.customers);
+    //return of(this.customers);
+    return this.http.get<Customer[]>(
+      `${environment.apiUrl}/customers`
+    );
   }
 
 }
