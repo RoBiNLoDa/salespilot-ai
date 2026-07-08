@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Customer } from '@features/customers/models/customer';
 import { CustomerService } from '@features/customers/services/customer.service';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-customer-list',
@@ -21,17 +22,23 @@ import { CustomerService } from '@features/customers/services/customer.service';
     MatCardModule,
     MatToolbarModule,
     MatFormFieldModule,
+    MatChipsModule,
   ],
   templateUrl: './customer-list.html',
   styleUrl: './customer-list.scss',
 })
 export class CustomerList implements OnInit {
-  displayedColumns = ['name', 'company', 'city', 'status', 'actions'];
-  customers: Customer[] = [];
-  customerService = inject(CustomerService)
+  displayedColumns: string[] = ['name', 'company', 'city', 'status', 'actions'];
+  readonly customers = signal<Customer[]>([]);
+  private readonly customerService = inject(CustomerService);
   ngOnInit(): void {
-    this.customerService.getAll().subscribe(customers => {
-      this.customers = customers;
-    })
+    this.customerService.getAll().subscribe({
+      next: (customers) => {
+        this.customers.set(customers);
+      },
+      error: (error) => {
+        console.error('Error loading customers', error);
+      },
+    });
   }
 }
