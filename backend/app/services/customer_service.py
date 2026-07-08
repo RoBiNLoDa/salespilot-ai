@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 from app.repositories.customer_repository import CustomerRepository
 from app.models.customer_create import CustomerCreate
+from app.models.customer_update import CustomerUpdate
 
 
 class CustomerService:
@@ -14,3 +15,10 @@ class CustomerService:
 
     def create(self, customer: CustomerCreate):
         return self.repository.create(customer)
+
+    def update(
+        self,
+        customer_id: int,
+        customer: CustomerUpdate,
+    ):
+        return self.repository.update(customer_id, customer)
