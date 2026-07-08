@@ -7,6 +7,5 @@ def to_camel(string: str) -> str:
 
 
 camel_config = ConfigDict(
-    alias_generator=to_camel,
-    populate_by_name=True,
+    alias_generator=to_camel, populate_by_name=True, from_attributes=True
 )
