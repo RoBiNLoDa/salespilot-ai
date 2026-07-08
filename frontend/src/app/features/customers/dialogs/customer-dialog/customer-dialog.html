@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>
+
+    Nuevo Cliente
+
+</h2>
+
+<mat-dialog-content>
+
+    <app-customer-form />
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+    <button matButton (click)="cancel()">
+
+        Cancelar
+
+    </button>
+
+    <button matButton="filled" (click)="save()">
+
+        Guardar
+
+    </button>
+
+</mat-dialog-actions>
