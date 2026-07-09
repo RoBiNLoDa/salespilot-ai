@@ -4,16 +4,8 @@ import { Observable, of } from 'rxjs';
 import { Customer } from '../models/customer';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development';
-
-export interface CustomerCreate {
-  firstName: string;
-  lastName: string;
-  company: string;
-  email: string;
-  phone: string;
-  city: string;
-  active: boolean;
-}
+import { CustomerCreate } from '../models/customer-create';
+import { CustomerUpdate } from '../models/customer-update';
 
 @Injectable({
   providedIn: 'root',
@@ -63,4 +55,12 @@ export class CustomerService {
   create(customer: CustomerCreate) {
     return this.http.post<Customer>(`${this.api}/customers`, customer);
   }
+
+  update(id: number, customer: CustomerUpdate): Observable<Customer> {
+  return this.http.put<Customer>(
+    `${this.api}/customers/${id}`,
+    customer,
+  );
+}
+
 }

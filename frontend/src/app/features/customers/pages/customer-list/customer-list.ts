@@ -45,12 +45,24 @@ export class CustomerList implements OnInit {
     });
   }
 
-  openDialog() {
+  openCreateDialog() {
     const dialogRef = this.dialog.open(CustomerDialog);
 
     dialogRef.afterClosed().subscribe((customer) => {
       if (customer) {
-        this.loadCustomers;
+        this.loadCustomers();
+      }
+    });
+  }
+
+  editCustomer(customer: Customer): void {
+    const dialogRef = this.dialog.open(CustomerDialog, {
+      data: customer,
+    });
+
+    dialogRef.afterClosed().subscribe((customer) => {
+      if (customer) {
+        this.loadCustomers();
       }
     });
   }
