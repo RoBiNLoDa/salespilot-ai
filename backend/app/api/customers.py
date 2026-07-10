@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status, Response
 from sqlalchemy.orm import Session
 
 from app.db.dependencies import get_db
@@ -31,3 +31,19 @@ def update_customer(
     service = CustomerService(db)
 
     return service.update(customer_id, customer)
+
+
+@router.delete(
+    "/{customer_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def delete_customer(
+    customer_id: int,
+    db: Session = Depends(get_db),
+):
+
+    service = CustomerService(db)
+
+    service.delete(customer_id)
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

@@ -57,10 +57,10 @@ export class CustomerService {
   }
 
   update(id: number, customer: CustomerUpdate): Observable<Customer> {
-  return this.http.put<Customer>(
-    `${this.api}/customers/${id}`,
-    customer,
-  );
-}
+    return this.http.put<Customer>(`${this.api}/customers/${id}`, customer);
+  }
 
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.api}/customers/${id}`);
+  }
 }

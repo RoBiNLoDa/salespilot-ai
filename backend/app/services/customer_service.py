@@ -22,3 +22,6 @@ class CustomerService:
         customer: CustomerUpdate,
     ):
         return self.repository.update(customer_id, customer)
+
+    def delete(self, customer_id: int) -> None:
+        self.repository.delete(customer_id)

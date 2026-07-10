@@ -58,3 +58,13 @@ class CustomerRepository:
         self.db.refresh(db_customer)
 
         return db_customer
+
+    def delete(self, customer_id: int) -> None:
+
+        customer = self.db.get(CustomerModel, customer_id)
+
+        if customer is None:
+            raise HTTPException(status_code=404, detail="Customer not found")
+
+        self.db.delete(customer)
+        self.db.commit()

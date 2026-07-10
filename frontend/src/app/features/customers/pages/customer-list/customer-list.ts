@@ -12,6 +12,7 @@ import { CustomerService } from '@features/customers/services/customer.service';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerDialog } from '@features/customers/dialogs/customer-dialog/customer-dialog';
+import { ConfirmDialog } from '@shared/ui/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-customer-list',
@@ -64,6 +65,28 @@ export class CustomerList implements OnInit {
       if (customer) {
         this.loadCustomers();
       }
+    });
+  }
+
+  deleteCustomer(customer: Customer): void {
+    const dialogRef = this.dialog.open(ConfirmDialog, {
+      data: {
+        title: 'Eliminar cliente',
+        message: `¿Está seguro de eliminar a ${customer.firstName} ${customer.lastName}?`,
+        confirmText: 'Eliminar',
+        cancelText: 'Cancelar',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (!confirmed) {
+        return;
+      }
+
+      this.customerService.delete(customer.id).subscribe({
+        next: () => this.loadCustomers(),
+        error: (error) => console.error(error),
+      });
     });
   }
 }
