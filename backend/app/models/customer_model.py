@@ -1,12 +1,10 @@
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.db.base import Base
+from app.models.base_model import BaseModel
 
 
-class CustomerModel(Base):
+class CustomerModel(BaseModel):
     __tablename__ = "customers"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
 
     first_name: Mapped[str]
     last_name: Mapped[str]
