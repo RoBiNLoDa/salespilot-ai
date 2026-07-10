@@ -2,7 +2,7 @@ from sqlalchemy import select
 
 from app.db.session import SessionLocal
 from app.enums.role import Role
-from app.models.user_model import UserModel
+from app.models.user import User
 from app.security.password import hash_password
 from app.core.config import settings
 
@@ -13,13 +13,13 @@ def seed_admin():
     db = SessionLocal()
 
     try:
-        admin = db.scalar(select(UserModel).where(UserModel.email == admin_email))
+        admin = db.scalar(select(User).where(User.email == admin_email))
 
         if admin:
             print("Administrator already exists.")
             return
 
-        admin = UserModel(
+        admin = User(
             first_name="Admin",
             last_name="SalesPilot",
             email=admin_email,

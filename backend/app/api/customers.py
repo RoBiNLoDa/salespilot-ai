@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends, status, Response
 from sqlalchemy.orm import Session
 
 from app.db.dependencies import get_db
-from app.models.customer import Customer
+from app.schemas.customer import Customer
 from app.services.customer_service import CustomerService
-from app.models.customer_create import CustomerCreate
-from app.models.customer_update import CustomerUpdate
+from app.schemas.customer_create import CustomerCreate
+from app.schemas.customer_update import CustomerUpdate
 
 router = APIRouter(prefix="/customers", tags=["Customers"])
 

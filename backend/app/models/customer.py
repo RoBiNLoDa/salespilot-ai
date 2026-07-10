@@ -1,16 +1,15 @@
-from pydantic import BaseModel
-from app.core.pydantic import camel_config
+from sqlalchemy.orm import Mapped, mapped_column
+
+from app.models.base_model import BaseModel
 
 
 class Customer(BaseModel):
+    __tablename__ = "customers"
 
-    model_config = camel_config
-
-    id: int
-    first_name: str
-    last_name: str
-    company: str
-    email: str
-    phone: str
-    city: str
-    active: bool
+    first_name: Mapped[str]
+    last_name: Mapped[str]
+    company: Mapped[str]
+    email: Mapped[str]
+    phone: Mapped[str]
+    city: Mapped[str]
+    active: Mapped[bool] = mapped_column(default=True)

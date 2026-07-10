@@ -5,7 +5,7 @@ from app.enums.role import Role
 from app.models.base_model import BaseModel
 
 
-class UserModel(BaseModel):
+class User(BaseModel):
     __tablename__ = "users"
 
     first_name: Mapped[str]

@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
 from app.repositories.customer_repository import CustomerRepository
-from app.models.customer_create import CustomerCreate
-from app.models.customer_update import CustomerUpdate
+from app.schemas.customer_create import CustomerCreate
+from app.schemas.customer_update import CustomerUpdate
 
 
 class CustomerService:
