@@ -12,15 +12,17 @@
 
 <mat-dialog-actions align="end">
 
-    <button matButton (click)="cancel()">
-
+    <button matButton (click)="cancel()" [disabled]="loading.loading()">
         Cancelar
-
     </button>
 
-    <button matButton="filled" (click)="save()">
+    <button mat-flat-button color="primary" [disabled]="loading.loading()" (click)="save()">
 
-        Guardar
+        @if (loading.loading()) {
+        <mat-spinner diameter="18"></mat-spinner>
+        }
+
+        <span>Guardar</span>
 
     </button>
 
