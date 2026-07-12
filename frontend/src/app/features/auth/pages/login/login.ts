@@ -7,7 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { LoginRequest } from '@features/auth/models/login-request';
 import { AuthService } from '@features/auth/services/auth.service';
+import { TokenService } from '@features/auth/services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +30,7 @@ export class Login {
   authService = inject(AuthService);
   router = inject(Router);
   _snackBar = inject(MatSnackBar);
+  private readonly tokenService = inject(TokenService)
 
   loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -39,11 +42,12 @@ export class Login {
       this.loginForm.markAllAsTouched();
       return;
     }
-    const { email, password } = this.loginForm.getRawValue();
-    if (this.authService.login(email, password)) {
-      this.router.navigate(['/dashboard']);
-    } else {
-      this._snackBar.open('Correo o contraseña incorrectos', 'Cerrar')
-    }
+    const request: LoginRequest = this.loginForm.getRawValue();
+    this.authService.login(request).subscribe({
+      next: (response) => {
+        this.tokenService.save(response.accessToken);
+        this.router.navigate(['/']);
+      }
+    })
   }
 }

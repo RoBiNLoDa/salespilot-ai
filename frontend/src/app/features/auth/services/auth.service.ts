@@ -1,26 +1,33 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { User } from '../models/user';
+import { LoginRequest } from '../models/login-request';
+import { Observable } from 'rxjs';
+import { LoginResponse } from '../models/login-response';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+import { TokenService } from './token.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private readonly _currentUser = signal<User | null>(null);
+  private readonly http = inject(HttpClient);
+  private readonly api = environment.apiUrl;
+  private readonly tokenService = inject(TokenService);
 
   readonly currentUser = this._currentUser.asReadonly();
 
-  login(email: string, password: string): boolean {
-    this._currentUser.set({
-      id: 1,
-      name: 'Robinson Loaiza',
-      email,
-    });
-
-    return true
-
+  login(request: LoginRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.api}/auth/login`, request);
   }
 
-  logout() {
+  logout(): void {
+    this.tokenService.remove();
     this._currentUser.set(null);
+  }
+
+  storeToken(token: string): void {
+    this.tokenService.save(token);
   }
 }
