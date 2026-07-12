@@ -9,6 +9,9 @@ from app.exceptions.auth import (
 from app.schemas.login_request import LoginRequest
 from app.schemas.login_response import LoginResponse
 from app.services.auth_service import AuthService
+from app.schemas.user_response import UserResponse
+from app.models.user import User
+from app.security.dependencies import get_current_user
 
 router = APIRouter(
     prefix="/auth",
@@ -40,3 +43,13 @@ def login(
             status_code=403,
             detail="User is inactive",
         )
+
+
+@router.get(
+    "/me",
+    response_model=UserResponse,
+)
+def me(
+    current_user: User = Depends(get_current_user),
+):
+    return current_user

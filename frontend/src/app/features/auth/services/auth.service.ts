@@ -6,6 +6,7 @@ import { LoginResponse } from '../models/login-response';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { TokenService } from './token.service';
+import { AuthResponse } from '../models/auth_response';
 
 @Injectable({
   providedIn: 'root',
@@ -30,4 +31,9 @@ export class AuthService {
   storeToken(token: string): void {
     this.tokenService.save(token);
   }
+
+  me(): Observable<AuthResponse> {
+    return this.http.get<AuthResponse>(`${this.api}/auth/me`);
+  }
+
 }

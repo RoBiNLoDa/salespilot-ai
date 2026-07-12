@@ -46,8 +46,17 @@ export class Login {
     this.authService.login(request).subscribe({
       next: (response) => {
         this.tokenService.save(response.accessToken);
-        this.router.navigate(['/']);
+        this.me();
       }
     })
   }
+
+  me() {
+    this.authService.me().subscribe({
+      next: (response) => {
+        console.log(response)
+      },
+    });
+  }
+
 }
