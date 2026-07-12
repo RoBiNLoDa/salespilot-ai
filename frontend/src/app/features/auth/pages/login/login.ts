@@ -27,10 +27,9 @@ import { TokenService } from '@features/auth/services/token.service';
 export class Login {
   private readonly fb = inject(FormBuilder);
   hidePassword = signal(true);
-  authService = inject(AuthService);
-  router = inject(Router);
-  _snackBar = inject(MatSnackBar);
-  private readonly tokenService = inject(TokenService)
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
 
   loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -42,21 +41,14 @@ export class Login {
       this.loginForm.markAllAsTouched();
       return;
     }
-    const request: LoginRequest = this.loginForm.getRawValue();
-    this.authService.login(request).subscribe({
-      next: (response) => {
-        this.tokenService.save(response.accessToken);
-        this.me();
-      }
-    })
-  }
 
-  me() {
-    this.authService.me().subscribe({
-      next: (response) => {
-        console.log(response)
+    this.authService.login(this.loginForm.getRawValue()).subscribe({
+      next: () => {
+        this.router.navigate(['/dashboard']);
+      },
+      error: () => {
+        this.snackBar.open('Correo o contraseña incorrectos', 'Cerrar', { duration: 3000 });
       },
     });
   }
-
 }

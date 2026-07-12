@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
+import { authGuard } from '@features/auth/guards/auth.guard';
+import { guestGuard } from '@features/auth/guards/guest.guard';
 import { Login } from '@features/auth/pages/login/login';
-import { Dashboard } from '@features/dashboard/pages/dashboard/dashboard';
 import { AuthLayout } from '@layout/auth/auth-layout/auth-layout';
 import { Shell } from '@layout/shell/shell/shell';
 
@@ -14,6 +15,7 @@ export const routes: Routes = [
   {
     path: 'login',
     component: AuthLayout,
+    canActivate: [guestGuard],
     children: [
       {
         path: '',
@@ -25,6 +27,7 @@ export const routes: Routes = [
   {
     path: '',
     component: Shell,
+    canActivate: [authGuard],
     children: [
       {
         path: 'dashboard',
