@@ -6,18 +6,27 @@ from app.schemas.customer import Customer
 from app.services.customer_service import CustomerService
 from app.schemas.customer_create import CustomerCreate
 from app.schemas.customer_update import CustomerUpdate
+from app.security.dependencies import get_current_user
+from app.models.user import User
 
 router = APIRouter(prefix="/customers", tags=["Customers"])
 
 
 @router.get("/", response_model=list[Customer])
-def get_customers(db: Session = Depends(get_db)):
+def get_customers(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     service = CustomerService(db)
     return service.get_all()
 
 
 @router.post("/", response_model=Customer, status_code=201)
-def create_customer(customer: CustomerCreate, db: Session = Depends(get_db)):
+def create_customer(
+    customer: CustomerCreate,
+    db: Session = Depends(get_db),
+    _: User = Depends(get_current_user),
+):
     service = CustomerService(db)
     return service.create(customer)
 
@@ -27,6 +36,7 @@ def update_customer(
     customer_id: int,
     customer: CustomerUpdate,
     db: Session = Depends(get_db),
+    _: User = Depends(get_current_user),
 ):
     service = CustomerService(db)
 
@@ -40,6 +50,7 @@ def update_customer(
 def delete_customer(
     customer_id: int,
     db: Session = Depends(get_db),
+    _: User = Depends(get_current_user),
 ):
 
     service = CustomerService(db)
