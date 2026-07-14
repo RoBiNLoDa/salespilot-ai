@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -7,7 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ProductService } from '@features/customers/services/product.service';
 import { ProductForm } from '@features/products/components/product-form/product-form';
@@ -26,24 +28,24 @@ import { ConfirmDialog } from '@shared/ui/confirm-dialog/confirm-dialog';
     MatToolbarModule,
     MatFormFieldModule,
     MatChipsModule,
+    MatPaginatorModule,
   ],
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',
 })
-export class ProductList implements OnInit {
+export class ProductList {
   displayedColumns: string[] = ['sku', 'name', 'price', 'stock', 'status', 'actions'];
   private readonly productService = inject(ProductService);
-  readonly products = signal<Product[]>([]);
+  private products = rxResource({
+    stream: () => this.productService.getAll(),
+  });
   private readonly dialog = inject(MatDialog);
 
-  ngOnInit(): void {
-    this.loadProducts();
-  }
+  readonly dataSource = new MatTableDataSource<Product>();
 
-  loadProducts() {
-    this.productService.getAll().subscribe({
-      next: (products) => this.products.set(products),
-      error: (error) => console.error(error),
+  constructor() {
+    effect(() => {
+      this.dataSource.data = this.products.value() ?? [];
     });
   }
 
@@ -52,7 +54,7 @@ export class ProductList implements OnInit {
 
     dialogRef.afterClosed().subscribe((product) => {
       if (product) {
-        this.loadProducts();
+        this.products.reload();
       }
     });
   }
@@ -61,12 +63,12 @@ export class ProductList implements OnInit {
     const dialogRef = this.dialog.open(ProductForm, {
       data: {
         id: product.id,
-      }
+      },
     });
 
     dialogRef.afterClosed().subscribe((product) => {
       if (product) {
-        this.loadProducts();
+        this.products.reload();
       }
     });
   }
@@ -87,9 +89,14 @@ export class ProductList implements OnInit {
       }
 
       this.productService.delete(product.id).subscribe({
-        next: () => this.loadProducts(),
+        next: () => this.products.reload(),
         error: (error) => console.error(error),
       });
     });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }
