@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from app.core.pydantic import camel_config
 
 
-class Customer(BaseModel):
+class CustomerResponse(BaseModel):
 
     model_config = camel_config
 

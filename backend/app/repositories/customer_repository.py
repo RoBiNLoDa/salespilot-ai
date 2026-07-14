@@ -6,6 +6,7 @@ from fastapi import HTTPException
 from app.models.customer import Customer
 from app.schemas.customer_create import CustomerCreate
 from app.schemas.customer_update import CustomerUpdate
+from app.exceptions.customer import CustomerNotFoundError
 
 
 class CustomerRepository:
@@ -41,10 +42,7 @@ class CustomerRepository:
         db_customer = self.db.get(Customer, customer_id)
 
         if db_customer is None:
-            raise HTTPException(
-                status_code=404,
-                detail="Customer not found",
-            )
+            raise CustomerNotFoundError()
 
         db_customer.first_name = customer.first_name
         db_customer.last_name = customer.last_name
@@ -64,7 +62,7 @@ class CustomerRepository:
         customer = self.db.get(Customer, customer_id)
 
         if customer is None:
-            raise HTTPException(status_code=404, detail="Customer not found")
+            raise CustomerNotFoundError()
 
         self.db.delete(customer)
         self.db.commit()
