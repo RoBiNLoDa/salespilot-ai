@@ -1,0 +1,38 @@
+section {
+  padding: 24px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.title-customers {
+  display: flex;
+}
+
+.content-card {
+  margin: 50px;
+}
+
+.card-table {
+  margin: 15px;
+  max-width: 100%;
+}
+
+mat-card {
+  min-width: 600px;
+}
+
+mat-card-header {
+  min-width: 150px;
+  max-width: 350px;
+  width: 100%;
+}
+
+.search {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+}

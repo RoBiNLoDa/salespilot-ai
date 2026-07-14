@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 
 import { Customer } from '../models/customer';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '@environments/environment';
 import { CustomerCreate } from '../models/customer-create';
 import { CustomerUpdate } from '../models/customer-update';
 

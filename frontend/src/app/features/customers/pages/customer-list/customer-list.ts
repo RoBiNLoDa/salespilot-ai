@@ -35,6 +35,7 @@ export class CustomerList implements OnInit {
   readonly customers = signal<Customer[]>([]);
   private readonly customerService = inject(CustomerService);
   private readonly dialog = inject(MatDialog);
+  
   ngOnInit(): void {
     this.loadCustomers();
   }

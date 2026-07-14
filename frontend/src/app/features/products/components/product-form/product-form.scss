@@ -1,0 +1,20 @@
+mat-dialog-content {
+  min-width: 550px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-dialog-content > form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

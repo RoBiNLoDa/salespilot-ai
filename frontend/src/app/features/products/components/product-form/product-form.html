@@ -1,0 +1,85 @@
+<h2 mat-dialog-title>
+
+    {{ editing() ? 'Editar Producto' : 'Nuevo Producto' }}
+
+</h2>
+
+<mat-dialog-content>
+    <form [formGroup]="this.productForm">
+
+        <mat-form-field appearance="outline">
+
+            <mat-label>SKU</mat-label>
+
+            <input matInput formControlName="sku">
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+
+            <mat-label>Nombre</mat-label>
+
+            <input matInput formControlName="name">
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+
+            <mat-label>Descripción</mat-label>
+
+            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="5" formControlName="description"></textarea>
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+
+            <mat-label>Precio</mat-label>
+
+            <input matInput formControlName="price" type="number" placeholder="0" min="0" step="0.01">
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+
+            <mat-label>Costo</mat-label>
+
+            <input matInput formControlName="cost" type="number" placeholder="0" min="0" step="0.01">
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+
+            <mat-label>Stock</mat-label>
+
+            <input matInput formControlName="stock" type="number" placeholder="0" min="0" step="1">
+
+        </mat-form-field>
+
+
+
+        <mat-checkbox formControlName="active">
+
+            Activo
+
+        </mat-checkbox>
+
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+
+    <button matButton (click)="cancel()" [disabled]="loading.loading()">
+        Cancelar
+    </button>
+
+    <button mat-flat-button color="primary" [disabled]="loading.loading()" (click)="save()">
+
+        @if (loading.loading()) {
+        <mat-spinner diameter="18"></mat-spinner>
+        }
+
+        <span>Guardar</span>
+
+    </button>
+
+</mat-dialog-actions>
