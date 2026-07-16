@@ -1,3 +1,6 @@
+from typing import Annotated
+
+from fastapi import Depends
 from sqlalchemy.orm import Session
 from datetime import date
 
@@ -8,6 +11,7 @@ from app.enums.quote_status import QuoteStatus
 from app.repositories.customer_repository import CustomerRepository
 from app.exceptions.quote import InvalidQuoteDateError
 from app.schemas.quote_update import QuoteUpdate
+from app.db.dependencies import get_db
 
 
 class QuoteService:
@@ -85,3 +89,13 @@ class QuoteService:
 
     def delete(self, quote_id: int):
         self.repository.delete(quote_id)
+
+
+DB = Annotated[Session, Depends(get_db)]
+
+
+def get_quote_service(db: DB) -> QuoteService:
+    return QuoteService(db)
+
+
+QuoteServiceDep = Annotated[QuoteService, Depends(get_quote_service)]

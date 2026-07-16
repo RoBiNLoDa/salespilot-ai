@@ -3,7 +3,7 @@ from datetime import date
 from pydantic import BaseModel
 
 from app.core.pydantic import camel_config
-from backend.app.enums.quote_status import QuoteStatus
+from app.enums.quote_status import QuoteStatus
 
 
 class QuoteUpdate(BaseModel):
