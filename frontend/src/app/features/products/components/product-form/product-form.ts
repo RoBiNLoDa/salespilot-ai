@@ -39,7 +39,6 @@ export class ProductForm implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
-    console.log(this.data, !this.data?.id)
     if (!this.data?.id) {
       return;
     }

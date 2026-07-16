@@ -1,7 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from sqlalchemy import select
-from fastapi import HTTPException
 
 from app.models.customer import Customer
 from app.schemas.customer_create import CustomerCreate
@@ -66,3 +65,12 @@ class CustomerRepository:
 
         self.db.delete(customer)
         self.db.commit()
+
+    def get_by_id(self, customer_id: int) -> Customer:
+
+        db_customer = self.db.get(Customer, customer_id)
+
+        if db_customer is None:
+            raise CustomerNotFoundError()
+
+        return db_customer

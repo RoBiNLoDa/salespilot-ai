@@ -9,6 +9,7 @@ from app.db.base import Base
 from app.models.customer import Customer
 from app.models.user import User
 from app.models.product import Product
+from app.models.quote import Quote
 from app.core.config import settings
 
 # this is the Alembic Config object, which provides
