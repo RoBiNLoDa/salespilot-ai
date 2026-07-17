@@ -11,7 +11,7 @@ from app.exceptions.auth import InvalidTokenError
 from app.models.user import User
 
 oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="/api/v1/auth/login",
+    tokenUrl="/api/v1/auth/token",
 )
 
 TokenDep = Annotated[str, Depends(oauth2_scheme)]

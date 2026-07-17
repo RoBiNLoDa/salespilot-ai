@@ -26,20 +26,13 @@ class QuoteRepository:
 
         return db_quote
 
-    def create(self, quote: QuoteCreate) -> Quote:
+    def create(self, quote: Quote) -> Quote:
 
-        db_quote = Quote(
-            customer_id=quote.customer_id,
-            issue_date=quote.issue_date,
-            expiration_date=quote.expiration_date,
-            notes=quote.notes,
-        )
-
-        self.db.add(db_quote)
+        self.db.add(quote)
         self.db.commit()
-        self.db.refresh(db_quote)
+        self.db.refresh(quote)
 
-        return db_quote
+        return quote
 
     def update(self, quote_id: int, quote: QuoteUpdate) -> Quote:
 

@@ -32,4 +32,4 @@ class AuthService:
             }
         )
 
-        return LoginResponse(accessToken=token)
+        return LoginResponse(access_token=token)
