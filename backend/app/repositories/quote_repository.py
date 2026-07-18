@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 
 from app.models.quote import Quote
 from app.exceptions.quote import QuoteNotFoundError
-from app.schemas.quote_create import QuoteCreate
 from app.schemas.quote_update import QuoteUpdate
 
 
