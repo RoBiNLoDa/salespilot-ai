@@ -1,7 +1,12 @@
+from typing import TYPE_CHECKING
+
 from sqlalchemy import Boolean, Integer, Numeric, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base_model import BaseModel
+
+if TYPE_CHECKING:
+    from app.models.quote_item import QuoteItem
 
 
 class Product(BaseModel):
@@ -45,3 +50,5 @@ class Product(BaseModel):
         default=True,
         nullable=False,
     )
+
+    quote_items: Mapped[list["QuoteItem"]] = relationship(back_populates="product")

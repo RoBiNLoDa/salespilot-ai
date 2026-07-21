@@ -32,4 +32,4 @@ class QuoteItem(BaseModel):
     )
 
     quote: Mapped["Quote"] = relationship(back_populates="items")
-    product: Mapped["Product"] = relationship()
+    product: Mapped["Product"] = relationship(back_populates="quote_items")

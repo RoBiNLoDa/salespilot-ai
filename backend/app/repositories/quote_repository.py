@@ -1,9 +1,10 @@
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.models.quote import Quote
 from app.exceptions.quote import QuoteNotFoundError
 from app.schemas.quote_update import QuoteUpdate
+from app.models.quote_item import QuoteItem
 
 
 class QuoteRepository:
@@ -18,7 +19,13 @@ class QuoteRepository:
 
     def get_by_id(self, quote_id: int) -> Quote:
 
-        db_quote = self.db.get(Quote, quote_id)
+        statement = (
+            select(Quote)
+            .options(selectinload(Quote.items).selectinload(QuoteItem.product))
+            .where(Quote.id == quote_id)
+        )
+
+        db_quote = self.db.scalar(statement)
 
         if db_quote is None:
             raise QuoteNotFoundError()
