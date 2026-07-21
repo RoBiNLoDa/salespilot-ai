@@ -23,14 +23,14 @@ class QuoteService:
     def _generate_quote_number(self) -> str:
 
         last_quote = self.repository.get_last_quote()
-        current_year = date.today().year
+        current_year = str(date.today().year)
 
         if last_quote is None:
             return f"COT-{current_year}-000001"
 
         parts = last_quote.split("-")
 
-        year_quote = int(parts[1])
+        year_quote = parts[1]
 
         if year_quote != current_year:
             return f"COT-{current_year}-000001"
@@ -47,15 +47,18 @@ class QuoteService:
         if issue_date < date.today():
             raise InvalidQuoteDateError()
 
-    def get_all(self):
+    def _validate_customer(self, customer_id: int) -> None:
+        self.customer_repository.get_by_id(customer_id)
+
+    def get_all(self) -> list[Quote]:
         return self.repository.get_all()
 
-    def get_by_id(self, quote_id: int):
+    def get_by_id(self, quote_id: int) -> Quote:
         return self.repository.get_by_id(quote_id)
 
     def create(self, quote_create: QuoteCreate):
 
-        self.customer_repository.get_by_id(quote_create.customer_id)
+        self._validate_customer(quote_create.customer_id)
 
         issue_date = quote_create.issue_date
         expiration_date = quote_create.expiration_date
@@ -73,21 +76,21 @@ class QuoteService:
 
         return self.repository.create(quote)
 
-    def update(self, quote_id: int, quote_update: QuoteUpdate):
+    def update(self, quote_id: int, quote_update: QuoteUpdate) -> Quote:
 
         if quote_update.customer_id is not None:
-            self.customer_repository.get_by_id(quote_update.customer_id)
+            self._validate_customer(quote_update.customer_id)
 
-        db_quote = self.repository.get_by_id(quote_id)
+        quote = self.repository.get_by_id(quote_id)
 
-        issue_date = quote_update.issue_date or db_quote.issue_date
-        expiration_date = quote_update.expiration_date or db_quote.expiration_date
+        issue_date = quote_update.issue_date or quote.issue_date
+        expiration_date = quote_update.expiration_date or quote.expiration_date
 
         self._validate_dates(issue_date, expiration_date)
 
         return self.repository.update(quote_id, quote_update)
 
-    def delete(self, quote_id: int):
+    def delete(self, quote_id: int) -> None:
         self.repository.delete(quote_id)
 
 

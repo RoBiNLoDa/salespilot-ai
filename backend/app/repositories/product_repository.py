@@ -2,7 +2,6 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.product import Product
-from app.schemas.product_create import ProductCreate
 from app.schemas.product_update import ProductUpdate
 from app.exceptions.product import ProductNotFoundError
 
@@ -28,11 +27,11 @@ class ProductRepository:
 
     def get_by_sku(self, sku: str) -> Product | None:
 
-        db_product = select(Product).where(Product.sku == sku)
+        statement = select(Product).where(Product.sku == sku)
 
-        return self.db.scalar(db_product)
+        return self.db.scalar(statement)
 
-    def create(self, product: ProductCreate) -> Product:
+    def create(self, product: Product) -> Product:
         db_product = Product(
             sku=product.sku,
             name=product.name,
