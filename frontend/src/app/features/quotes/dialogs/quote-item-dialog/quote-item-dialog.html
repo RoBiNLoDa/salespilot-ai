@@ -1,10 +1,10 @@
-<h2 mat-dialog-title>Agregar Producto</h2>
+<h2 mat-dialog-title>{{ isEdit() ? 'Editar producto' : 'Agregar producto' }}</h2>
 <mat-dialog-content>
     <form [formGroup]="form">
 
         <mat-form-field appearance="outline">
 
-            <mat-label>Nombre</mat-label>
+            <mat-label>Producto</mat-label>
 
             <mat-select formControlName="productId" name="productId">
                 @for (item of products(); track item.id ) {
@@ -26,5 +26,5 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     <button matButton (click)="cancel()">Cancelar</button>
-    <button matButton color="primary" (click)="save()" >Guardar</button>
+    <button matButton color="primary" (click)="save()" >{{ isEdit() ? 'Actualizar' : 'Guardar' }}</button>
 </mat-dialog-actions>

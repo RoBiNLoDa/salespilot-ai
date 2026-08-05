@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -9,6 +9,7 @@ import { Product } from '@features/products/models/product';
 import { ProductService } from '@features/products/services/product.service';
 import { QuoteItemCreate } from '@features/quotes/models/quote-item-create';
 import { QuoteItemDialogData } from '@features/quotes/models/quote-item-dialog-data';
+import { QuoteItemUpdate } from '@features/quotes/models/quote-item-update';
 import { QuoteItemService } from '@features/quotes/services/quote.item.service';
 import { NotificationService } from '@shared/services/notification.service';
 
@@ -30,6 +31,7 @@ export class QuoteItemDialog implements OnInit {
   private readonly dialogRef = inject(MatDialogRef<QuoteItemDialog>);
   private readonly productService = inject(ProductService);
   private readonly notification = inject(NotificationService);
+  readonly isEdit = computed(() => !!this.data.quoteItem);
 
   private readonly quoteItemService = inject(QuoteItemService);
 
@@ -45,6 +47,14 @@ export class QuoteItemDialog implements OnInit {
 
   ngOnInit(): void {
     this.loadProducts();
+    if (this.data.quoteItem) {
+      this.form.patchValue({
+        productId: this.data.quoteItem.productId,
+
+        quantity: this.data.quoteItem.quantity,
+      });
+      this.form.controls.productId.disable();
+    }
   }
 
   private loadProducts(): void {
@@ -60,6 +70,20 @@ export class QuoteItemDialog implements OnInit {
       return;
     }
 
+    if (this.isEdit()) {
+      this.update();
+
+      return;
+    }
+
+    this.create();
+  }
+
+  cancel(): void {
+    this.dialogRef.close();
+  }
+
+  create() {
     const { productId, quantity } = this.form.getRawValue();
 
     const request: QuoteItemCreate = {
@@ -70,9 +94,7 @@ export class QuoteItemDialog implements OnInit {
 
     this.quoteItemService.create(request).subscribe({
       next: () => {
-        this.notification.success(
-          'Producto agregado correctamente.',
-        );
+        this.notification.success('Producto agregado correctamente.');
         this.dialogRef.close(true);
       },
       error: () => {
@@ -81,7 +103,23 @@ export class QuoteItemDialog implements OnInit {
     });
   }
 
-  cancel(): void {
-    this.dialogRef.close();
+  update() {
+    const { quantity } = this.form.getRawValue();
+    const quoteItem = this.data.quoteItem!;
+
+    const request: QuoteItemUpdate = {
+      quantity: quantity!,
+    };
+
+    this.quoteItemService.update(quoteItem.id, request).subscribe({
+      next: () => {
+        this.notification.success('Producto actualizado correctamente.');
+        this.dialogRef.close(true);
+      },
+      error: () => {
+        this.notification.error('Ocurrió un error al actualizar el producto.');
+      },
+    });
   }
+
 }

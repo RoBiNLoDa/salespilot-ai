@@ -6,6 +6,10 @@ import { QuoteHeader } from '@features/quotes/components/quote-header/quote-head
 import { QuoteItemTable } from '@features/quotes/components/quote-item-table/quote-item-table';
 import { MatDialog } from '@angular/material/dialog';
 import { QuoteItemDialog } from '@features/quotes/dialogs/quote-item-dialog/quote-item-dialog';
+import { QuoteItem } from '@features/quotes/models/quote-item';
+import { ConfirmDialog } from '@shared/ui/confirm-dialog/confirm-dialog';
+import { QuoteItemService } from '@features/quotes/services/quote.item.service';
+import { NotificationService } from '@shared/services/notification.service';
 
 @Component({
   selector: 'app-quote-detail',
@@ -21,6 +25,10 @@ export class QuoteDetail implements OnInit {
   readonly quote = signal<Quote | null>(null);
 
   private readonly dialog = inject(MatDialog);
+
+  private readonly quoteItemService = inject(QuoteItemService);
+
+  private readonly notification = inject(NotificationService);
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -43,6 +51,7 @@ export class QuoteDetail implements OnInit {
         data: {
           quoteId: this.quote()!.id,
         },
+        width: '350px',
       })
       .afterClosed()
       .subscribe((result) => {
@@ -52,6 +61,45 @@ export class QuoteDetail implements OnInit {
       });
   }
 
-  editItem(event: any) {}
-  deleteItem(event: any) {}
+  editItem(item: QuoteItem): void {
+    this.dialog
+      .open(QuoteItemDialog, {
+        data: {
+          quoteId: this.quote()!.id,
+
+          quoteItem: item,
+        },
+        width: '350px',
+      })
+      .afterClosed()
+      .subscribe(() => this.loadQuote(this.quote()!.id));
+  }
+
+  deleteItem(item: QuoteItem) {
+    const dialogRef = this.dialog.open(ConfirmDialog, {
+      data: {
+        title: 'Eliminar producto',
+        message: `¿Está seguro de eliminar este producto de la cotización?`,
+        confirmText: 'Eliminar',
+        cancelText: 'Cancelar',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (!confirmed) {
+        return;
+      }
+
+      this.quoteItemService.delete(item.id).subscribe({
+        next: () => {
+          this.notification.success('Producto eliminado correctamente.');
+          this.loadQuote(this.quote()!.id);
+        },
+        error: (error) => {
+          this.notification.error('Ocurrió un error al eliminar el producto.');
+          console.error(error);
+        },
+      });
+    });
+  }
 }
