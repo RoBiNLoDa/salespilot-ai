@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { ProductService } from '@features/customers/services/product.service';
+import { ProductService } from '@features/products/services/product.service';
 import { ProductForm } from '@features/products/components/product-form/product-form';
 import { Product } from '@features/products/models/product';
 import { ConfirmDialog } from '@shared/ui/confirm-dialog/confirm-dialog';

@@ -1,0 +1,11 @@
+<app-quote-header
+    [quote]="quote()!"
+    (edit)="editQuote()"
+    (addItem)="openAddItemDialog()">
+</app-quote-header>
+
+<app-quote-item-table
+    [items]="quote()?.items ?? []"
+    (edit)="editItem($event)"
+    (delete)="deleteItem($event)">
+</app-quote-item-table>

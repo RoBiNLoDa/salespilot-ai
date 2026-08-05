@@ -1,0 +1,74 @@
+<section>
+    <div class="title-quotes">
+        <h1>Cotizaciones</h1>
+        <span class="spacer"></span>
+        <button matButton="elevated"><mat-icon>add</mat-icon>
+            Nueva Cotización
+        </button>
+    </div>
+
+    <div class="content-card">
+        <mat-card class="card-table" appearance="outlined">
+            <mat-card-content>
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                    <ng-container matColumnDef="quoteNumber">
+                        <th mat-header-cell *matHeaderCellDef>Número</th>
+                        <td mat-cell *matCellDef="let quote">
+                            {{ quote.quoteNumber }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="issueDate">
+                        <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                        <td mat-cell *matCellDef="let quote">
+                            {{ quote.issueDate | date: 'dd/MM/yyyy'}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef>Estado</th>
+                        <td mat-cell *matCellDef="let quote">
+                            <mat-chip>{{ quote.status }}</mat-chip>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="customer">
+                        <th mat-header-cell *matHeaderCellDef>Cliente</th>
+                        <td mat-cell *matCellDef="let quote">
+
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef></th>
+
+                        <td mat-cell *matCellDef="let quote">
+
+                            <button mat-icon-button (click)="viewQuote(quote)">
+                                <mat-icon>visibility</mat-icon>
+                            </button>
+
+                            <button mat-icon-button>
+                                <mat-icon>edit</mat-icon>
+                            </button>
+
+                            <button mat-icon-button>
+                                <mat-icon>delete</mat-icon>
+                            </button>
+
+                        </td>
+
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+                </table>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+
+</section>

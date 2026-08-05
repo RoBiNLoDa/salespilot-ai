@@ -1,0 +1,66 @@
+mat-card {
+  margin: 24px auto;
+  padding: 16px;
+  width: 800px;
+}
+
+.title {
+  font-size: 1.7rem;
+  font-weight: bold;
+}
+
+.labels {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+
+  .info-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    height: 30px;
+    .icon {
+      line-height: 15px;
+    }
+    .quote-text {
+      font-size: 1.2rem;
+      span {
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.title-note {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+  line-height: 15px;
+  span {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+}
+
+.note {
+  margin-top: 1.5rem;
+  padding: 1.2rem;
+  border: 1px solid var(--mat-sys-secondary);
+  border-radius: 0.75rem;
+  font-size: 1.2rem;
+  span {
+    font-weight: 700;
+  }
+}
+
+.actions {
+  margin: 1.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}

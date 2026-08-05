@@ -7,7 +7,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { ProductService } from '@features/customers/services/product.service';
+import { ProductService } from '@features/products/services/product.service';
 import { LoadingService } from '@shared/services/loading.service';
 import { NotificationService } from '@shared/services/notification.service';
 import { finalize } from 'rxjs';

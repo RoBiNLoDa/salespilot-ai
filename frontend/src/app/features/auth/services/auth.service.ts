@@ -4,9 +4,9 @@ import { LoginRequest } from '../models/login-request';
 import { Observable, switchMap, tap } from 'rxjs';
 import { LoginResponse } from '../models/login-response';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
 import { TokenService } from './token.service';
 import { Router } from '@angular/router';
+import { API } from '@core/config/application.config';
 
 @Injectable({
   providedIn: 'root',
@@ -14,15 +14,15 @@ import { Router } from '@angular/router';
 export class AuthService {
   private readonly _currentUser = signal<User | null>(null);
   private readonly http = inject(HttpClient);
-  private readonly api = environment.apiUrl;
+  private readonly apiAuth = API.auth;
   private readonly tokenService = inject(TokenService);
   private readonly router = inject(Router)
 
   readonly currentUser = this._currentUser.asReadonly();
 
   login(request: LoginRequest): Observable<User> {
-    return this.http.post<LoginResponse>(`${this.api}/auth/login`, request).pipe(
-      tap(response => this.tokenService.save(response.accessToken)),
+    return this.http.post<LoginResponse>(`${this.apiAuth}/login`, request).pipe(
+      tap(response => this.tokenService.save(response.access_token)),
       switchMap(() => this.me()),
       tap(user => this._currentUser.set(user))
     );
@@ -39,7 +39,7 @@ export class AuthService {
   }
 
   me(): Observable<User> {
-    return this.http.get<User>(`${this.api}/auth/me`);
+    return this.http.get<User>(`${this.apiAuth}/me`);
   }
 
   initialize(): void {

@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Agregar Producto</h2>
+<mat-dialog-content>
+    <form [formGroup]="form">
+
+        <mat-form-field appearance="outline">
+
+            <mat-label>Nombre</mat-label>
+
+            <mat-select formControlName="productId" name="productId">
+                @for (item of products(); track item.id ) {
+                <mat-option [value]="item.id">{{item.name}}</mat-option>
+                }
+            </mat-select>
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+
+            <mat-label>Cantidad</mat-label>
+
+            <input matInput type="number" min="1" step="1" formControlName="quantity">
+
+        </mat-form-field>
+
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button matButton (click)="cancel()">Cancelar</button>
+    <button matButton color="primary" (click)="save()" >Guardar</button>
+</mat-dialog-actions>
