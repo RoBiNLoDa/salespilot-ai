@@ -10,6 +10,7 @@ import { QuoteItem } from '@features/quotes/models/quote-item';
 import { ConfirmDialog } from '@shared/ui/confirm-dialog/confirm-dialog';
 import { QuoteItemService } from '@features/quotes/services/quote.item.service';
 import { NotificationService } from '@shared/services/notification.service';
+import { QuoteDialog } from '@features/quotes/dialogs/quote-dialog/quote-dialog';
 
 @Component({
   selector: 'app-quote-detail',
@@ -43,7 +44,19 @@ export class QuoteDetail implements OnInit {
     });
   }
 
-  editQuote() {}
+  editQuote() {
+    const dialogRef = this.dialog.open(QuoteDialog, {
+      data: {
+        quote: this.quote(),
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((quote) =>{
+      if(quote){
+        this.loadQuote(quote.id);
+      }
+    });
+  }
 
   openAddItemDialog() {
     this.dialog

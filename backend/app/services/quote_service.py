@@ -39,12 +39,17 @@ class QuoteService:
 
         return f"COT-{current_year}-{number}"
 
-    def _validate_dates(self, issue_date: date, expiration_date: date):
+    def _validate_create_dates(self, issue_date: date, expiration_date: date):
 
         if expiration_date < issue_date:
             raise InvalidQuoteDateError()
 
         if issue_date < date.today():
+            raise InvalidQuoteDateError()
+
+    def _validate_update_dates(self, issue_date: date, expiration_date: date):
+
+        if expiration_date < issue_date:
             raise InvalidQuoteDateError()
 
     def _validate_customer(self, customer_id: int) -> None:
@@ -63,7 +68,7 @@ class QuoteService:
         issue_date = quote_create.issue_date
         expiration_date = quote_create.expiration_date
 
-        self._validate_dates(issue_date, expiration_date)
+        self._validate__create_dates(issue_date, expiration_date)
 
         quote = Quote(
             quote_number=self._generate_quote_number(),
@@ -86,7 +91,7 @@ class QuoteService:
         issue_date = quote_update.issue_date or quote.issue_date
         expiration_date = quote_update.expiration_date or quote.expiration_date
 
-        self._validate_dates(issue_date, expiration_date)
+        self._validate_update_dates(issue_date, expiration_date)
 
         return self.repository.update(quote_id, quote_update)
 

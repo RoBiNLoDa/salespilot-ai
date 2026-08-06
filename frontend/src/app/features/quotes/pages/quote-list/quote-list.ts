@@ -9,6 +9,8 @@ import { MatCardModule } from '@angular/material/card';
 import { Quote } from '@features/quotes/models/quote';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { QuoteDialog } from '@features/quotes/dialogs/quote-dialog/quote-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-quote-list',
@@ -25,7 +27,8 @@ import { Router } from '@angular/router';
 })
 export class QuoteList {
   private readonly quoteService = inject(QuoteService);
-  private readonly router = inject(Router)
+  private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
 
   displayedColumns = ['quoteNumber', 'customer', 'issueDate', 'status', 'actions'];
 
@@ -43,5 +46,15 @@ export class QuoteList {
 
   viewQuote(quote: Quote): void {
     this.router.navigate(['/quotes', quote.id]);
+  }
+
+  openCreateDialog() {
+    const dialogRef = this.dialog.open(QuoteDialog);
+
+    dialogRef.afterClosed().subscribe((quote) => {
+      if (quote) {
+        this.quotes.reload();
+      }
+    });
   }
 }

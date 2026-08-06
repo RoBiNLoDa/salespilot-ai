@@ -2,7 +2,7 @@
     <div class="title-quotes">
         <h1>Cotizaciones</h1>
         <span class="spacer"></span>
-        <button matButton="elevated"><mat-icon>add</mat-icon>
+        <button matButton="elevated" (click)="openCreateDialog()"><mat-icon>add</mat-icon>
             Nueva Cotización
         </button>
     </div>
@@ -47,10 +47,6 @@
 
                             <button mat-icon-button (click)="viewQuote(quote)">
                                 <mat-icon>visibility</mat-icon>
-                            </button>
-
-                            <button mat-icon-button>
-                                <mat-icon>edit</mat-icon>
                             </button>
 
                             <button mat-icon-button>

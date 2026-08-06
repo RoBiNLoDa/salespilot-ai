@@ -1,12 +1,38 @@
 <h2 mat-dialog-title>
 
-    Nueva Cotización
+    {{ isEdit() ? 'Editar Cotización' : 'Nueva Cotización' }}
 
 </h2>
 
 <mat-dialog-content>
 
-    <app-quote-form (save)="save($event)">
+    <app-quote-form [quote]="data?.quote">
     </app-quote-form>
 
 </mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+    <button matButton (click)="cancel()" [disabled]="loading.loading()">
+        Cancelar
+    </button>
+
+    <button mat-flat-button color="primary" [disabled]="loading.loading()" (click)="save()">
+
+        @if (loading.loading()) {
+
+        <mat-spinner diameter="18"></mat-spinner>
+
+        } @else {
+
+        <span>
+
+            {{ isEdit() ? 'Actualizar' : 'Guardar' }}
+
+        </span>
+
+        }
+
+    </button>
+
+</mat-dialog-actions>

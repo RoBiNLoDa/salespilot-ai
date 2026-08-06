@@ -1,1 +1,42 @@
-<p>quote-form works!</p>
+<form [formGroup]="form">
+    <mat-form-field appearance="outline">
+
+        <mat-label>Cliente</mat-label>
+
+        <mat-select formControlName="customerId">
+
+            @for (customer of customers(); track customer.id) {
+
+            <mat-option [value]="customer.id">
+
+                {{ customer.firstName }} {{customer.lastName}}
+
+            </mat-option>
+
+            }
+
+        </mat-select>
+
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Fecha emisión</mat-label>
+        <input matInput [matDatepicker]="picker1" formControlName="issueDate">
+        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Fecha vencimiento</mat-label>
+        <input matInput [matDatepicker]="picker2" formControlName="expirationDate">
+        <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Observaciones</mat-label>
+        <textarea matInput formControlName="notes" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+    </mat-form-field>
+
+</form>
