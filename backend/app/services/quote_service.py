@@ -12,6 +12,7 @@ from app.repositories.customer_repository import CustomerRepository
 from app.exceptions.quote import InvalidQuoteDateError
 from app.schemas.quote_update import QuoteUpdate
 from app.db.dependencies import get_db
+from app.schemas.quote_status_update import QuoteStatusUpdate
 
 
 class QuoteService:
@@ -97,6 +98,17 @@ class QuoteService:
 
     def delete(self, quote_id: int) -> None:
         self.repository.delete(quote_id)
+
+    def update_status(
+        self,
+        quote_id: int,
+        request: QuoteStatusUpdate,
+    ) -> Quote:
+
+        return self.repository.update_status(
+            quote_id,
+            request.status,
+        )
 
 
 DB = Annotated[Session, Depends(get_db)]

@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>Cambiar estado</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+
+
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+
+      <mat-select formControlName="status">
+
+        @for (status of statuses; track status) {
+        <mat-option [value]="status">
+          {{ statusConfig[status].label }}
+        </mat-option>
+        }
+
+      </mat-select>
+
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <button mat-button (click)="cancel()">
+    Cancelar
+  </button>
+
+  <button mat-flat-button (click)="save()">
+    Guardar
+  </button>
+
+</mat-dialog-actions>

@@ -1,7 +1,8 @@
 <app-quote-header
     [quote]="quote()!"
     (edit)="editQuote()"
-    (addItem)="openAddItemDialog()">
+    (addItem)="openAddItemDialog()"
+    (changeStatus)="changeStatus()">
 </app-quote-header>
 
 <app-quote-item-table

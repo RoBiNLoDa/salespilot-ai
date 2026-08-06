@@ -3,7 +3,6 @@ import { Component, effect, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,6 +14,8 @@ import { ProductService } from '@features/products/services/product.service';
 import { ProductForm } from '@features/products/components/product-form/product-form';
 import { Product } from '@features/products/models/product';
 import { ConfirmDialog } from '@shared/ui/confirm-dialog/confirm-dialog';
+import { StatusChip } from "@shared/ui/status-chip/status-chip";
+import { ACTIVE_STATUS_CONFIG } from '@shared/models/active-status-config';
 
 @Component({
   selector: 'app-product-list',
@@ -27,9 +28,9 @@ import { ConfirmDialog } from '@shared/ui/confirm-dialog/confirm-dialog';
     MatCardModule,
     MatToolbarModule,
     MatFormFieldModule,
-    MatChipsModule,
     MatPaginatorModule,
-  ],
+    StatusChip
+],
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',
 })
@@ -40,6 +41,7 @@ export class ProductList {
     stream: () => this.productService.getAll(),
   });
   private readonly dialog = inject(MatDialog);
+  protected readonly activeStatusConfig = ACTIVE_STATUS_CONFIG;
 
   readonly dataSource = new MatTableDataSource<Product>();
 

@@ -9,13 +9,16 @@
                 <div class="icon">
                     <mat-icon>person</mat-icon>
                 </div>
-                <div class="quote-text"><span>Cliente: </span>{{quote.customer.firstName}} {{quote.customer.lastName}}</div>
+                <div class="quote-text"><span>Cliente: </span>{{quote.customer.firstName}} {{quote.customer.lastName}}
+                </div>
             </div>
             <div class="info-item">
                 <div class="icon">
                     <mat-icon>draw</mat-icon>
                 </div>
-                <div class="quote-text"><span>Estado: </span>{{quote.status}}</div>
+                <div class="quote-text"><span>Estado: </span><app-status-chip [status]="quote.status"
+                        [config]="statusConfig">
+                    </app-status-chip></div>
             </div>
             <div class="info-item">
                 <div class="icon">
@@ -27,7 +30,8 @@
                 <div class="icon">
                     <mat-icon>date_range</mat-icon>
                 </div>
-                <div class="quote-text"><span>Fecha vencimiento: </span>{{quote.expirationDate | date: 'dd/MM/yyyy' }}</div>
+                <div class="quote-text"><span>Fecha vencimiento: </span>{{quote.expirationDate | date: 'dd/MM/yyyy' }}
+                </div>
             </div>
         </div>
         <div class="note">
@@ -39,6 +43,7 @@
         <div class="actions">
             <button matButton="elevated" (click)="edit.emit()"><mat-icon>edit</mat-icon> Editar</button>
             <button matButton="elevated" (click)="addItem.emit()"><mat-icon>add</mat-icon> Agregar Producto</button>
+            <button matButton="elevated" (click)="changeStatus.emit()" [disabled]="!canChangeStatus()" ><mat-icon>swap_horiz</mat-icon>Cambiar estado</button>
         </div>
 
     </mat-card-actions>

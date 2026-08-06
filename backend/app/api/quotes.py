@@ -5,6 +5,7 @@ from app.services.quote_service import QuoteServiceDep
 from app.security.dependencies import CurrentUser
 from app.schemas.quote_create import QuoteCreate
 from app.schemas.quote_update import QuoteUpdate
+from app.schemas.quote_status_update import QuoteStatusUpdate
 
 router = APIRouter(prefix="/quotes", tags=["Quotes"])
 
@@ -35,3 +36,16 @@ def update_quote(
 def delete_quote(quote_id: int, service: QuoteServiceDep, _: CurrentUser):
     service.delete(quote_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.patch("/{quote_id}/status", response_model=QuoteResponse)
+def update_status(
+    quote_id: int,
+    request: QuoteStatusUpdate,
+    service: QuoteServiceDep,
+    _: CurrentUser,
+):
+    return service.update_status(
+        quote_id,
+        request,
+    )

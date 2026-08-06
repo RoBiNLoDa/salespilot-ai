@@ -9,10 +9,11 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Customer } from '@features/customers/models/customer';
 import { CustomerService } from '@features/customers/services/customer.service';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerDialog } from '@features/customers/dialogs/customer-dialog/customer-dialog';
 import { ConfirmDialog } from '@shared/ui/confirm-dialog/confirm-dialog';
+import { StatusChip } from "@shared/ui/status-chip/status-chip";
+import { ACTIVE_STATUS_CONFIG } from '@shared/models/active-status-config';
 
 @Component({
   selector: 'app-customer-list',
@@ -25,8 +26,8 @@ import { ConfirmDialog } from '@shared/ui/confirm-dialog/confirm-dialog';
     MatCardModule,
     MatToolbarModule,
     MatFormFieldModule,
-    MatChipsModule,
-  ],
+    StatusChip
+],
   templateUrl: './customer-list.html',
   styleUrl: './customer-list.scss',
 })
@@ -35,6 +36,7 @@ export class CustomerList implements OnInit {
   readonly customers = signal<Customer[]>([]);
   private readonly customerService = inject(CustomerService);
   private readonly dialog = inject(MatDialog);
+  protected readonly activeStatusConfig = ACTIVE_STATUS_CONFIG;
   
   ngOnInit(): void {
     this.loadCustomers();

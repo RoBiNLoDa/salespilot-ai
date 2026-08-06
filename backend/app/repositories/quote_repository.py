@@ -5,6 +5,7 @@ from app.models.quote import Quote
 from app.exceptions.quote import QuoteNotFoundError
 from app.schemas.quote_update import QuoteUpdate
 from app.models.quote_item import QuoteItem
+from app.enums.quote_status import QuoteStatus
 
 
 class QuoteRepository:
@@ -69,3 +70,18 @@ class QuoteRepository:
         query = select(Quote.quote_number).order_by(Quote.id.desc()).limit(1)
 
         return self.db.scalar(query)
+
+    def update_status(
+        self,
+        quote_id: int,
+        status: QuoteStatus,
+    ) -> Quote:
+
+        db_quote = self.get_by_id(quote_id)
+
+        db_quote.status = status
+
+        self.db.commit()
+        self.db.refresh(db_quote)
+
+        return db_quote

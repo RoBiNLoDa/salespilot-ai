@@ -11,6 +11,7 @@ import { ConfirmDialog } from '@shared/ui/confirm-dialog/confirm-dialog';
 import { QuoteItemService } from '@features/quotes/services/quote.item.service';
 import { NotificationService } from '@shared/services/notification.service';
 import { QuoteDialog } from '@features/quotes/dialogs/quote-dialog/quote-dialog';
+import { QuoteStatusDialog } from '@features/quotes/dialogs/quote-status-dialog/quote-status-dialog-data';
 
 @Component({
   selector: 'app-quote-detail',
@@ -51,8 +52,8 @@ export class QuoteDetail implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((quote) =>{
-      if(quote){
+    dialogRef.afterClosed().subscribe((quote) => {
+      if (quote) {
         this.loadQuote(quote.id);
       }
     });
@@ -113,6 +114,20 @@ export class QuoteDetail implements OnInit {
           console.error(error);
         },
       });
+    });
+  }
+
+  changeStatus() {
+    const dialogRef = this.dialog.open(QuoteStatusDialog, {
+      data: {
+        quote: this.quote(),
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((updated) => {
+      if (updated) {
+        this.loadQuote(this.quote()!.id);
+      }
     });
   }
 }
