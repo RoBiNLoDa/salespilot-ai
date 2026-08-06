@@ -13,7 +13,7 @@ class QuoteRepository:
         self.db = db
 
     def get_all(self) -> list[Quote]:
-        statement = select(Quote)
+        statement = select(Quote).options(selectinload(Quote.customer))
 
         return self.db.scalars(statement).all()
 
@@ -21,7 +21,10 @@ class QuoteRepository:
 
         statement = (
             select(Quote)
-            .options(selectinload(Quote.items).selectinload(QuoteItem.product))
+            .options(
+                selectinload(Quote.customer),
+                selectinload(Quote.items).selectinload(QuoteItem.product),
+            )
             .where(Quote.id == quote_id)
         )
 

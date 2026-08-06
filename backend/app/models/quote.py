@@ -9,6 +9,7 @@ from app.enums.quote_status import QuoteStatus
 
 if TYPE_CHECKING:
     from app.models.quote_item import QuoteItem
+    from app.models.customer import Customer
 
 
 class Quote(BaseModel):
@@ -21,6 +22,8 @@ class Quote(BaseModel):
     )
 
     customer_id: Mapped[int] = mapped_column(ForeignKey("customers.id"))
+
+    customer: Mapped["Customer"] = relationship(back_populates="quotes")
 
     issue_date: Mapped[date] = mapped_column(Date)
 
