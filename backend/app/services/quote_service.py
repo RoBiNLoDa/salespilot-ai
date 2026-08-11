@@ -13,13 +13,23 @@ from app.exceptions.quote import InvalidQuoteDateError
 from app.schemas.quote_update import QuoteUpdate
 from app.db.dependencies import get_db
 from app.schemas.quote_status_update import QuoteStatusUpdate
+from app.services.quote_calculator import QuoteCalculator
+from app.mappers.quote_mapper import QuoteMapper
+from app.models.quote_item import QuoteItem
+from app.schemas.quote_item_response import QuoteItemResponse
+from app.schemas.quote_response import QuoteResponse
 
 
 class QuoteService:
 
-    def __init__(self, db: Session):
+    def __init__(
+        self,
+        db: Session,
+        mapper: QuoteMapper,
+    ):
         self.repository = QuoteRepository(db)
         self.customer_repository = CustomerRepository(db)
+        self.mapper = mapper
 
     def _generate_quote_number(self) -> str:
 
@@ -56,11 +66,17 @@ class QuoteService:
     def _validate_customer(self, customer_id: int) -> None:
         self.customer_repository.get_by_id(customer_id)
 
-    def get_all(self) -> list[Quote]:
-        return self.repository.get_all()
+    def get_all(self) -> list[QuoteResponse]:
 
-    def get_by_id(self, quote_id: int) -> Quote:
-        return self.repository.get_by_id(quote_id)
+        quotes = self.repository.get_all()
+
+        return [self.mapper.to_response(quote) for quote in quotes]
+
+    def get_by_id(self, quote_id: int) -> QuoteResponse:
+
+        quote = self.repository.get_by_id(quote_id)
+
+        return self.mapper.to_response(quote)
 
     def create(self, quote_create: QuoteCreate):
 
@@ -69,7 +85,7 @@ class QuoteService:
         issue_date = quote_create.issue_date
         expiration_date = quote_create.expiration_date
 
-        self._validate__create_dates(issue_date, expiration_date)
+        self._validate_create_dates(issue_date, expiration_date)
 
         quote = Quote(
             quote_number=self._generate_quote_number(),
@@ -80,9 +96,15 @@ class QuoteService:
             notes=quote_create.notes,
         )
 
-        return self.repository.create(quote)
+        quote = self.repository.create(quote)
 
-    def update(self, quote_id: int, quote_update: QuoteUpdate) -> Quote:
+        return self.mapper.to_response(quote)
+
+    def update(
+        self,
+        quote_id: int,
+        quote_update: QuoteUpdate,
+    ) -> QuoteResponse:
 
         if quote_update.customer_id is not None:
             self._validate_customer(quote_update.customer_id)
@@ -92,9 +114,17 @@ class QuoteService:
         issue_date = quote_update.issue_date or quote.issue_date
         expiration_date = quote_update.expiration_date or quote.expiration_date
 
-        self._validate_update_dates(issue_date, expiration_date)
+        self._validate_update_dates(
+            issue_date,
+            expiration_date,
+        )
 
-        return self.repository.update(quote_id, quote_update)
+        quote = self.repository.update(
+            quote_id,
+            quote_update,
+        )
+
+        return self.mapper.to_response(quote)
 
     def delete(self, quote_id: int) -> None:
         self.repository.delete(quote_id)
@@ -103,11 +133,33 @@ class QuoteService:
         self,
         quote_id: int,
         request: QuoteStatusUpdate,
-    ) -> Quote:
+    ) -> QuoteResponse:
 
-        return self.repository.update_status(
+        quote = self.repository.update_status(
             quote_id,
             request.status,
+        )
+
+        return self.mapper.to_response(quote)
+
+    def _to_item_response(
+        self,
+        item: QuoteItem,
+    ) -> QuoteItemResponse:
+
+        totals = self.calculator.calculate_item(item)
+
+        return QuoteItemResponse(
+            id=item.id,
+            quote_id=item.quote_id,
+            product_id=item.product_id,
+            product=item.product,
+            quantity=item.quantity,
+            unit_price=item.unit_price,
+            discount=item.discount,
+            totals=totals,
+            created_at=item.created_at,
+            updated_at=item.updated_at,
         )
 
 
@@ -115,7 +167,14 @@ DB = Annotated[Session, Depends(get_db)]
 
 
 def get_quote_service(db: DB) -> QuoteService:
-    return QuoteService(db)
+
+    calculator = QuoteCalculator()
+    mapper = QuoteMapper(calculator)
+
+    return QuoteService(
+        db,
+        mapper,
+    )
 
 
 QuoteServiceDep = Annotated[QuoteService, Depends(get_quote_service)]

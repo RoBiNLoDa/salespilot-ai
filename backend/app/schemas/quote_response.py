@@ -7,6 +7,7 @@ from app.enums.quote_status import QuoteStatus
 from app.core.pydantic import camel_config
 from app.schemas.quote_item_response import QuoteItemResponse
 from app.schemas.customer_summary_response import CustomerSummaryResponse
+from app.schemas.quote_totals_response import QuoteTotalsResponse
 
 
 class QuoteResponse(BaseModel):
@@ -20,7 +21,10 @@ class QuoteResponse(BaseModel):
     issue_date: date
     expiration_date: date
     status: QuoteStatus
-    notes: str
+    notes: str | None
     items: list[QuoteItemResponse]
+
+    totals: QuoteTotalsResponse
+
     created_at: datetime
     updated_at: datetime

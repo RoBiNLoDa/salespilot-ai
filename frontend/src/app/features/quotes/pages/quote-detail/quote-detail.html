@@ -1,12 +1,51 @@
-<app-quote-header
-    [quote]="quote()!"
-    (edit)="editQuote()"
-    (addItem)="openAddItemDialog()"
+<app-quote-header [quote]="quote()!" (edit)="editQuote()" (addItem)="openAddItemDialog()"
     (changeStatus)="changeStatus()">
 </app-quote-header>
 
-<app-quote-item-table
-    [items]="quote()?.items ?? []"
-    (edit)="editItem($event)"
-    (delete)="deleteItem($event)">
+<app-quote-item-table [items]="quote()?.items ?? []" (edit)="editItem($event)" (delete)="deleteItem($event)">
 </app-quote-item-table>
+
+@if (quote(); as currentQuote) {
+<div class="quote-detail">
+
+    <span class="spacer"></span>
+
+    <div class="quote-totals">
+
+        <div class="total-row">
+            <span>Subtotal</span>
+
+            <strong>
+                {{ currentQuote.totals.subtotal | currency:'COP':'symbol-narrow':'1.0-0' }}
+            </strong>
+        </div>
+
+        <div class="total-row">
+            <span>Descuento</span>
+
+            <strong>
+                {{ currentQuote.totals.discount | currency:'COP':'symbol-narrow':'1.0-0' }}
+            </strong>
+        </div>
+
+        <div class="total-row">
+            <span>Impuestos</span>
+
+            <strong>
+                {{ currentQuote.totals.tax | currency:'COP':'symbol-narrow':'1.0-0' }}
+            </strong>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="total-row total-final">
+            <span>Total</span>
+
+            <strong>
+                {{ currentQuote.totals.total | currency:'COP':'symbol-narrow':'1.0-0' }}
+            </strong>
+        </div>
+
+    </div>
+</div>
+}

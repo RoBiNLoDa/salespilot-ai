@@ -24,7 +24,7 @@ export class QuoteItemTable {
     'quantity',
     'unitPrice',
     'discount',
-    'subtotal',
+    'total',
     'actions',
   ];
 }

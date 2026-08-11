@@ -1,0 +1,53 @@
+.quote-detail {
+  display: flex;
+  width: 800px;
+  margin: 24px auto;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.quote-totals {
+  width: 100%;
+  max-width: 420px;
+  margin: 24px 0 0 auto;
+  padding: 20px 24px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 12px;
+  background: var(--mat-sys-surface-container-low);
+  box-sizing: border-box;
+}
+
+.total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 8px 0;
+
+  span {
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  strong {
+    font-weight: 600;
+  }
+}
+
+.total-final {
+  padding-top: 16px;
+
+  span,
+  strong {
+    font-size: 1.15rem;
+  }
+
+  strong {
+    font-weight: 700;
+  }
+}
+
+mat-divider {
+  margin: 8px 0;
+}

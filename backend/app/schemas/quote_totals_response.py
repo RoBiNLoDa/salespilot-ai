@@ -1,0 +1,18 @@
+from decimal import Decimal
+
+from pydantic import BaseModel
+
+from app.core.pydantic import camel_config
+
+
+class QuoteTotalsResponse(BaseModel):
+
+    model_config = camel_config
+
+    subtotal: Decimal
+
+    discount: Decimal
+
+    tax: Decimal
+
+    total: Decimal

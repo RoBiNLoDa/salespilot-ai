@@ -12,10 +12,12 @@ import { QuoteItemService } from '@features/quotes/services/quote.item.service';
 import { NotificationService } from '@shared/services/notification.service';
 import { QuoteDialog } from '@features/quotes/dialogs/quote-dialog/quote-dialog';
 import { QuoteStatusDialog } from '@features/quotes/dialogs/quote-status-dialog/quote-status-dialog-data';
+import { CommonModule } from '@angular/common';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-quote-detail',
-  imports: [QuoteHeader, QuoteItemTable],
+  imports: [QuoteHeader, QuoteItemTable, CommonModule, MatDividerModule],
   templateUrl: './quote-detail.html',
   styleUrl: './quote-detail.scss',
 })
