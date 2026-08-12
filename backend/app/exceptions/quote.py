@@ -14,3 +14,7 @@ class InvalidQuoteDateError(HTTPException):
             status_code=status.HTTP_409_CONFLICT,
             detail="Dates have an error",
         )
+
+
+class InvalidQuoteStatusTransitionError(Exception):
+    pass

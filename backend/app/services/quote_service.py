@@ -9,15 +9,17 @@ from app.schemas.quote_create import QuoteCreate
 from app.models.quote import Quote
 from app.enums.quote_status import QuoteStatus
 from app.repositories.customer_repository import CustomerRepository
-from app.exceptions.quote import InvalidQuoteDateError
+from app.exceptions.quote import (
+    InvalidQuoteDateError,
+    InvalidQuoteStatusTransitionError,
+)
 from app.schemas.quote_update import QuoteUpdate
 from app.db.dependencies import get_db
 from app.schemas.quote_status_update import QuoteStatusUpdate
 from app.services.quote_calculator import QuoteCalculator
 from app.mappers.quote_mapper import QuoteMapper
-from app.models.quote_item import QuoteItem
-from app.schemas.quote_item_response import QuoteItemResponse
 from app.schemas.quote_response import QuoteResponse
+from app.exceptions.quote_item import QuoteNotEditableError
 
 
 class QuoteService:
@@ -30,6 +32,19 @@ class QuoteService:
         self.repository = QuoteRepository(db)
         self.customer_repository = CustomerRepository(db)
         self.mapper = mapper
+
+    ALLOWED_STATUS_TRANSITIONS = {
+        QuoteStatus.DRAFT: {
+            QuoteStatus.SENT,
+        },
+        QuoteStatus.SENT: {
+            QuoteStatus.ACCEPTED,
+            QuoteStatus.REJECTED,
+        },
+        QuoteStatus.ACCEPTED: set(),
+        QuoteStatus.REJECTED: set(),
+        QuoteStatus.EXPIRED: set(),
+    }
 
     def _generate_quote_number(self) -> str:
 
@@ -70,11 +85,16 @@ class QuoteService:
 
         quotes = self.repository.get_all()
 
-        return [self.mapper.to_response(quote) for quote in quotes]
+        return [
+            self.mapper.to_response(self._update_expired_status(quote))
+            for quote in quotes
+        ]
 
     def get_by_id(self, quote_id: int) -> QuoteResponse:
 
         quote = self.repository.get_by_id(quote_id)
+
+        quote = self._update_expired_status(quote)
 
         return self.mapper.to_response(quote)
 
@@ -106,10 +126,12 @@ class QuoteService:
         quote_update: QuoteUpdate,
     ) -> QuoteResponse:
 
+        quote = self.repository.get_by_id(quote_id)
+
+        self._validate_quote_editable(quote)
+
         if quote_update.customer_id is not None:
             self._validate_customer(quote_update.customer_id)
-
-        quote = self.repository.get_by_id(quote_id)
 
         issue_date = quote_update.issue_date or quote.issue_date
         expiration_date = quote_update.expiration_date or quote.expiration_date
@@ -127,6 +149,11 @@ class QuoteService:
         return self.mapper.to_response(quote)
 
     def delete(self, quote_id: int) -> None:
+
+        quote = self.repository.get_by_id(quote_id)
+
+        self._validate_quote_editable(quote)
+
         self.repository.delete(quote_id)
 
     def update_status(
@@ -135,6 +162,13 @@ class QuoteService:
         request: QuoteStatusUpdate,
     ) -> QuoteResponse:
 
+        quote = self.repository.get_by_id(quote_id)
+
+        self._validate_status_transition(
+            quote.status,
+            request.status,
+        )
+
         quote = self.repository.update_status(
             quote_id,
             request.status,
@@ -142,25 +176,37 @@ class QuoteService:
 
         return self.mapper.to_response(quote)
 
-    def _to_item_response(
+    def _validate_status_transition(
         self,
-        item: QuoteItem,
-    ) -> QuoteItemResponse:
+        current_status: QuoteStatus,
+        new_status: QuoteStatus,
+    ) -> None:
 
-        totals = self.calculator.calculate_item(item)
-
-        return QuoteItemResponse(
-            id=item.id,
-            quote_id=item.quote_id,
-            product_id=item.product_id,
-            product=item.product,
-            quantity=item.quantity,
-            unit_price=item.unit_price,
-            discount=item.discount,
-            totals=totals,
-            created_at=item.created_at,
-            updated_at=item.updated_at,
+        allowed_statuses = self.ALLOWED_STATUS_TRANSITIONS.get(
+            current_status,
+            set(),
         )
+
+        if new_status not in allowed_statuses:
+            raise InvalidQuoteStatusTransitionError(
+                f"No se puede cambiar una cotización de "
+                f"{current_status.value} a {new_status.value}."
+            )
+
+    def _update_expired_status(self, quote: Quote) -> Quote:
+
+        if quote.status == QuoteStatus.SENT and quote.expiration_date < date.today():
+            quote = self.repository.update_status(
+                quote.id,
+                QuoteStatus.EXPIRED,
+            )
+
+        return quote
+
+    def _validate_quote_editable(self, quote: Quote) -> None:
+
+        if quote.status != QuoteStatus.DRAFT:
+            raise QuoteNotEditableError()
 
 
 DB = Annotated[Session, Depends(get_db)]

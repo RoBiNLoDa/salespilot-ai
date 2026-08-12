@@ -8,12 +8,13 @@ from app.repositories.product_repository import ProductRepository
 from app.repositories.quote_item_repository import QuoteItemRepository
 from app.repositories.quote_repository import QuoteRepository
 from app.schemas.quote_item_create import QuoteItemCreate
-from app.exceptions.quote_item import InvalidQuantityError
+from app.exceptions.quote_item import InvalidQuantityError, QuoteNotEditableError
 from app.models.quote_item import QuoteItem
 from app.schemas.quote_item_update import QuoteItemUpdate
 from app.db.dependencies import get_db
 from app.schemas.quote_item_response import QuoteItemResponse
 from app.services.quote_calculator import QuoteCalculator
+from app.enums.quote_status import QuoteStatus
 
 
 class QuoteItemService:
@@ -42,7 +43,7 @@ class QuoteItemService:
 
     def create(self, quote_item_create: QuoteItemCreate):
 
-        self.quote_repository.get_by_id(quote_item_create.quote_id)
+        self._validate_quote_editable(quote_item_create.quote_id)
 
         product = self.product_repository.get_by_id(quote_item_create.product_id)
 
@@ -62,16 +63,32 @@ class QuoteItemService:
 
         return self._to_response(quote_item)
 
-    def update(self, quote_item_id: int, quote_item_update: QuoteItemUpdate):
+    def update(
+        self,
+        quote_item_id: int,
+        quote_item_update: QuoteItemUpdate,
+    ):
 
         if quote_item_update.quantity <= 0:
             raise InvalidQuantityError()
 
-        quote_item = self.repository.update(quote_item_id, quote_item_update)
+        quote_item = self.repository.get_by_id(quote_item_id)
+
+        self._validate_quote_editable(quote_item.quote_id)
+
+        quote_item = self.repository.update(
+            quote_item_id,
+            quote_item_update,
+        )
 
         return self._to_response(quote_item)
 
     def delete(self, quote_item_id: int):
+
+        quote_item = self.repository.get_by_id(quote_item_id)
+
+        self._validate_quote_editable(quote_item.quote_id)
+
         self.repository.delete(quote_item_id)
 
     def _to_response(self, item: QuoteItem) -> QuoteItemResponse:
@@ -91,6 +108,13 @@ class QuoteItemService:
             created_at=item.created_at,
             updated_at=item.updated_at,
         )
+
+    def _validate_quote_editable(self, quote_id: int) -> None:
+
+        quote = self.quote_repository.get_by_id(quote_id)
+
+        if quote.status != QuoteStatus.DRAFT:
+            raise QuoteNotEditableError()
 
 
 DB = Annotated[Session, Depends(get_db)]

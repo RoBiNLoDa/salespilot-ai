@@ -9,7 +9,7 @@
 
       <mat-select formControlName="status">
 
-        @for (status of statuses; track status) {
+        @for (status of statuses(); track status) {
         <mat-option [value]="status">
           {{ statusConfig[status].label }}
         </mat-option>

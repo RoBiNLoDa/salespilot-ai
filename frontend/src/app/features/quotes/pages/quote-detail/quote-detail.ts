@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Quote } from '@features/quotes/models/quote';
 import { QuoteService } from '@features/quotes/services/quote.service';
@@ -11,9 +11,10 @@ import { ConfirmDialog } from '@shared/ui/confirm-dialog/confirm-dialog';
 import { QuoteItemService } from '@features/quotes/services/quote.item.service';
 import { NotificationService } from '@shared/services/notification.service';
 import { QuoteDialog } from '@features/quotes/dialogs/quote-dialog/quote-dialog';
-import { QuoteStatusDialog } from '@features/quotes/dialogs/quote-status-dialog/quote-status-dialog-data';
+import { QuoteStatusDialog } from '@features/quotes/dialogs/quote-status-dialog/quote-status-dialog';
 import { CommonModule } from '@angular/common';
 import { MatDividerModule } from '@angular/material/divider';
+import { QuoteStatus } from '@features/quotes/models/quote-status';
 
 @Component({
   selector: 'app-quote-detail',
@@ -33,6 +34,8 @@ export class QuoteDetail implements OnInit {
   private readonly quoteItemService = inject(QuoteItemService);
 
   private readonly notification = inject(NotificationService);
+
+  readonly isEditable = computed(() => this.quote()?.status === QuoteStatus.DRAFT);
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));

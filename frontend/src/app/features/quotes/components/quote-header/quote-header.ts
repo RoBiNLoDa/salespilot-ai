@@ -20,8 +20,9 @@ export class QuoteHeader {
   readonly addItem = output<void>();
   protected readonly statusConfig = QUOTE_STATUS_CONFIG;
   readonly changeStatus = output<void>();
+  readonly editable = input(false);
   readonly canChangeStatus = computed(() => {
-    const status = this.quote()?.status;
+    const status = this.quote().status;
 
     return (
       status !== QuoteStatus.ACCEPTED &&

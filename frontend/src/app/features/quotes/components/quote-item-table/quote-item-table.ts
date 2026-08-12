@@ -15,6 +15,8 @@ import { MatButtonModule } from '@angular/material/button';
 export class QuoteItemTable {
   readonly items = input.required<QuoteItem[]>();
 
+  readonly editable = input(false);
+
   readonly edit = output<QuoteItem>();
 
   readonly delete = output<QuoteItem>();
