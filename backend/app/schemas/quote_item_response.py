@@ -19,6 +19,7 @@ class QuoteItemResponse(BaseModel):
     quantity: int
     unit_price: Decimal
     discount: Decimal
+    tax_rate: Decimal
 
     totals: QuoteItemTotalsResponse
 

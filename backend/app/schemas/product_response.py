@@ -1,7 +1,8 @@
 from decimal import Decimal
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
+from app.core.pydantic import camel_config
 
 
 class ProductResponse(BaseModel):
@@ -12,9 +13,10 @@ class ProductResponse(BaseModel):
     price: Decimal
     cost: Decimal
     stock: int
+    tax_rate: Decimal
     active: bool
 
     created_at: datetime
     updated_at: datetime
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = camel_config

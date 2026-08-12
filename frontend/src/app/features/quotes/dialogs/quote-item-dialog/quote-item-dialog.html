@@ -22,9 +22,33 @@
 
         </mat-form-field>
 
+        <mat-form-field appearance="outline">
+            <mat-label>Descuento (%)</mat-label>
+
+            <input matInput type="number" min="0" max="100" step="1" formControlName="discount" />
+
+            @if (form.controls.discount.hasError('required')) {
+            <mat-error>
+                El descuento es obligatorio.
+            </mat-error>
+            }
+
+            @if (form.controls.discount.hasError('min')) {
+            <mat-error>
+                El descuento no puede ser menor que 0%.
+            </mat-error>
+            }
+
+            @if (form.controls.discount.hasError('max')) {
+            <mat-error>
+                El descuento no puede ser mayor que 100%.
+            </mat-error>
+            }
+        </mat-form-field>
+
     </form>
 </mat-dialog-content>
 <mat-dialog-actions>
     <button matButton (click)="cancel()">Cancelar</button>
-    <button matButton color="primary" (click)="save()" >{{ isEdit() ? 'Actualizar' : 'Guardar' }}</button>
+    <button matButton color="primary" (click)="save()">{{ isEdit() ? 'Actualizar' : 'Guardar' }}</button>
 </mat-dialog-actions>

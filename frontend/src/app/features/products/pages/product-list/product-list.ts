@@ -14,7 +14,7 @@ import { ProductService } from '@features/products/services/product.service';
 import { ProductForm } from '@features/products/components/product-form/product-form';
 import { Product } from '@features/products/models/product';
 import { ConfirmDialog } from '@shared/ui/confirm-dialog/confirm-dialog';
-import { StatusChip } from "@shared/ui/status-chip/status-chip";
+import { StatusChip } from '@shared/ui/status-chip/status-chip';
 import { ACTIVE_STATUS_CONFIG } from '@shared/models/active-status-config';
 
 @Component({
@@ -29,13 +29,13 @@ import { ACTIVE_STATUS_CONFIG } from '@shared/models/active-status-config';
     MatToolbarModule,
     MatFormFieldModule,
     MatPaginatorModule,
-    StatusChip
-],
+    StatusChip,
+  ],
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',
 })
 export class ProductList {
-  displayedColumns: string[] = ['sku', 'name', 'price', 'stock', 'status', 'actions'];
+  displayedColumns: string[] = ['sku', 'name', 'price', 'stock', 'taxRate', 'status', 'actions'];
   private readonly productService = inject(ProductService);
   private products = rxResource({
     stream: () => this.productService.getAll(),

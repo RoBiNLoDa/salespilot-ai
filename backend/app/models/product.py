@@ -1,3 +1,4 @@
+from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, Integer, Numeric, String
@@ -37,6 +38,12 @@ class Product(BaseModel):
     cost: Mapped[float] = mapped_column(
         Numeric(10, 2),
         nullable=False,
+    )
+
+    tax_rate: Mapped[Decimal] = mapped_column(
+        Numeric(5, 2),
+        nullable=False,
+        default=Decimal("19.00"),
     )
 
     stock: Mapped[int] = mapped_column(

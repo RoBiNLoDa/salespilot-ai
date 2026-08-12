@@ -39,6 +39,7 @@ class ProductRepository:
             price=product.price,
             cost=product.cost,
             stock=product.stock,
+            tax_rate=product.tax_rate,
             active=product.active,
         )
 

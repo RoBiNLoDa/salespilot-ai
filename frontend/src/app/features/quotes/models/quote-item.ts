@@ -12,6 +12,8 @@ export interface QuoteItem {
   unitPrice: number;
   discount: number;
 
+  taxRate: number;
+
   totals: QuoteItemTotals;
 
   createdAt: string;

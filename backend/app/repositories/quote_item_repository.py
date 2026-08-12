@@ -36,7 +36,9 @@ class QuoteItemRepository:
 
         db_quote_item = self.get_by_id(quote_item_id)
 
-        for key, value in quote_item.model_dump(exclude_unset=True).items():
+        for key, value in quote_item.model_dump(
+            exclude_unset=True, exclude_none=True
+        ).items():
             setattr(db_quote_item, key, value)
 
         self.db.commit()

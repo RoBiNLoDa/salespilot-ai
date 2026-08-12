@@ -7,5 +7,6 @@ export interface ProductCreate {
   cost: number;
 
   stock: number;
+  taxRate: number;
   active: boolean;
 }

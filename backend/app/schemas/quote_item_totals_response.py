@@ -13,4 +13,6 @@ class QuoteItemTotalsResponse(BaseModel):
 
     discount: Decimal
 
+    tax: Decimal
+
     total: Decimal

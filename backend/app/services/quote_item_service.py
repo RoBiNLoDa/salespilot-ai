@@ -55,6 +55,7 @@ class QuoteItemService:
             quantity=quote_item_create.quantity,
             unit_price=product.price,
             discount=Decimal("0.00"),
+            tax_rate=product.tax_rate,
         )
 
         quote_item = self.repository.create(quote_item)
@@ -85,6 +86,7 @@ class QuoteItemService:
             quantity=item.quantity,
             unit_price=item.unit_price,
             discount=item.discount,
+            taxRate=item.tax_rate,
             totals=totals,
             created_at=item.created_at,
             updated_at=item.updated_at,

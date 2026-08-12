@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { QuoteItem } from '@features/quotes/models/quote-item';
-import { MatTableModule } from "@angular/material/table";
+import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
@@ -24,6 +24,9 @@ export class QuoteItemTable {
     'quantity',
     'unitPrice',
     'discount',
+    'subtotal',
+    'taxRate',
+    'tax',
     'total',
     'actions',
   ];

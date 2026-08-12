@@ -25,6 +25,7 @@ class QuoteMapper:
             quantity=item.quantity,
             unit_price=item.unit_price,
             discount=item.discount,
+            tax_rate=item.tax_rate,
             totals=totals,
             created_at=item.created_at,
             updated_at=item.updated_at,

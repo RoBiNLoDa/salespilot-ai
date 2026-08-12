@@ -47,7 +47,6 @@ export class QuoteForm implements OnInit {
     this.loadCustomers();
     const quote = this.quote();
     if (!quote) return;
-    console.log(quote)
     this.form.patchValue({
       customerId: this.quote()!.customerId,
       issueDate: toLocalDate(this.quote()!.issueDate),

@@ -22,7 +22,7 @@ import { finalize } from 'rxjs';
     MatCheckboxModule,
     MatButtonModule,
     MatDialogModule,
-    MatProgressSpinner
+    MatProgressSpinner,
   ],
   templateUrl: './product-form.html',
   styleUrl: './product-form.scss',
@@ -58,39 +58,39 @@ export class ProductForm implements OnInit {
       price: [0, [Validators.required, Validators.min(0)]],
       cost: [0, [Validators.required, Validators.min(0)]],
       stock: [0, [Validators.required, Validators.min(0), Validators.pattern(/^[0-9]+$/)]],
+      taxRate: [19, [Validators.required, Validators.min(0), Validators.max(100)]],
       active: [true],
     });
   }
 
   cancel(): void {
-      this.dialogRef.close();
-    }
-  
-    save(): void {
-        if (this.productForm.invalid) {
-          this.productForm.markAllAsTouched();
-          return;
-        }
-    
-        const value = this.productForm.getRawValue();
-    
-        const request = this.editing()
-          ? this.productService.update(this.data?.id!, value)
-          : this.productService.create(value);
-    
-        this.loading.show();
-    
-        request.pipe(finalize(() => this.loading.hide())).subscribe({
-          next: (product) => {
-            this.notification.success(
-              this.editing() ? 'Producto actualizado correctamente.' : 'Producto creado correctamente.',
-            );
-            this.dialogRef.close(product);
-          },
-          error: () => {
-            this.notification.error('Ocurrió un error al guardar el producto.');
-          },
-        });
-      }
+    this.dialogRef.close();
+  }
 
+  save(): void {
+    if (this.productForm.invalid) {
+      this.productForm.markAllAsTouched();
+      return;
+    }
+
+    const value = this.productForm.getRawValue();
+
+    const request = this.editing()
+      ? this.productService.update(this.data?.id!, value)
+      : this.productService.create(value);
+
+    this.loading.show();
+
+    request.pipe(finalize(() => this.loading.hide())).subscribe({
+      next: (product) => {
+        this.notification.success(
+          this.editing() ? 'Producto actualizado correctamente.' : 'Producto creado correctamente.',
+        );
+        this.dialogRef.close(product);
+      },
+      error: () => {
+        this.notification.error('Ocurrió un error al guardar el producto.');
+      },
+    });
+  }
 }

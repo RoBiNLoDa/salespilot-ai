@@ -8,5 +8,6 @@ export interface Product {
   cost: number;
 
   stock: number;
+  taxRate: number;
   active: boolean;
 }

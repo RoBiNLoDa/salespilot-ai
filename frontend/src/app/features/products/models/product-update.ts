@@ -7,5 +7,6 @@ export interface ProductUpdate {
   cost: number;
 
   stock: number;
+  taxRate: number;
   active: boolean;
 }

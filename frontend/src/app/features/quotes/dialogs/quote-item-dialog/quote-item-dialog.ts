@@ -41,6 +41,8 @@ export class QuoteItemDialog implements OnInit {
     productId: [null as number | null, Validators.required],
 
     quantity: [1, [Validators.required, Validators.min(1)]],
+
+    discount: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
   });
 
   readonly products = signal<Product[]>([]);
@@ -52,6 +54,8 @@ export class QuoteItemDialog implements OnInit {
         productId: this.data.quoteItem.productId,
 
         quantity: this.data.quoteItem.quantity,
+
+        discount: this.data.quoteItem.discount,
       });
       this.form.controls.productId.disable();
     }
@@ -104,11 +108,13 @@ export class QuoteItemDialog implements OnInit {
   }
 
   update() {
-    const { quantity } = this.form.getRawValue();
+    const { quantity, discount } = this.form.getRawValue();
+
     const quoteItem = this.data.quoteItem!;
 
     const request: QuoteItemUpdate = {
       quantity: quantity!,
+      discount: discount!,
     };
 
     this.quoteItemService.update(quoteItem.id, request).subscribe({

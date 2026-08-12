@@ -31,5 +31,11 @@ class QuoteItem(BaseModel):
         nullable=False,
     )
 
+    tax_rate: Mapped[Decimal] = mapped_column(
+        Numeric(5, 2),
+        default=Decimal("19.00"),
+        nullable=False,
+    )
+
     quote: Mapped["Quote"] = relationship(back_populates="items")
     product: Mapped["Product"] = relationship(back_populates="quote_items")
